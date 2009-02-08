@@ -25,6 +25,12 @@ module Nokogiri
           assert_equal doc.errors.length, @parser.document.errors.length
         end
 
+        def test_errors_returned_are_error_objects
+          @parser.parse('<foo><bar></foo>')
+
+          assert @parser.document.errors.all?{|e| e.is_a? Nokogiri::XML::SAX::SyntaxError }
+        end
+        
         def test_parse
           File.open(XML_FILE, 'rb') { |f|
             @parser.parse(f)

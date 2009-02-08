@@ -143,8 +143,13 @@ static void error_func(void * ctx, const char *msg, ...)
   va_start(args, msg);
   vasprintf(&message, msg, args);
   va_end(args);
-
-  rb_funcall(doc, rb_intern("error"), 1, rb_str_new2(message));
+  VALUE error_klass =
+    rb_const_get(mNokogiriXmlSax, rb_intern("SyntaxError"));
+  
+  VALUE error =
+    rb_funcall(error_klass, rb_intern("new"), 1, rb_str_new2(message));
+  
+  rb_funcall(doc, rb_intern("error"), 1, error);
   free(message);
 }
 #endif
@@ -191,6 +196,7 @@ static VALUE allocate(VALUE klass)
 VALUE cNokogiriXmlSaxParser ;
 void init_xml_sax_parser()
 {
+  
   VALUE klass = cNokogiriXmlSaxParser =
     rb_const_get(mNokogiriXmlSax, rb_intern("Parser"));
   rb_define_alloc_func(klass, allocate);
