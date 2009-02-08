@@ -44,8 +44,8 @@ module Nokogiri
 
         ###
         # Called on document errors
-        # +string+ contains the error
-        def error string
+        # +exception+ is the error object
+        def error exception
         end
 
         ###
